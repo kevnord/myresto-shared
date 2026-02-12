@@ -1,0 +1,43 @@
+{
+  "name": "@myresto/shared",
+  "version": "0.1.0",
+  "description": "Shared utilities and components for MyResto ecosystem",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./lib/*": "./dist/lib/*.js",
+    "./components/*": "./dist/components/*.js",
+    "./test/*": "./dist/test/*.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@clerk/clerk-react": "^6.0.0",
+    "@supabase/supabase-js": "^2.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@clerk/clerk-react": "^6.11.0",
+    "@supabase/supabase-js": "^2.48.1",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "typescript": "^5.7.2"
+  },
+  "keywords": [
+    "myresto",
+    "myrestomod",
+    "shared",
+    "components",
+    "utilities"
+  ],
+  "author": "Kevin Nord",
+  "license": "MIT"
+}
