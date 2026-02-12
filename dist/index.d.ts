@@ -18,4 +18,5 @@ export * from './lib/auth';
 export * from './lib/brand';
 export * from './lib/theme';
 export { default as Footer } from './components/Footer';
+export { ErrorBoundary, default as ErrorBoundaryDefault } from './components/ErrorBoundary';
 //# sourceMappingURL=index.d.ts.map

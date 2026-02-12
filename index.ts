@@ -22,5 +22,6 @@ export * from './lib/theme';
 
 // Export components (default exports need re-export)
 export { default as Footer } from './components/Footer';
+export { ErrorBoundary, default as ErrorBoundaryDefault } from './components/ErrorBoundary';
 
 // Test utilities available via direct import: @myresto/shared/test/mockAuth
