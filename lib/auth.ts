@@ -18,9 +18,9 @@ const AUTH_BYPASS = import.meta.env?.VITE_AUTH_BYPASS === 'true';
 
 export const useAuth = AUTH_BYPASS ? MockAuth.useAuth : ClerkAuth.useAuth;
 export const useUser = AUTH_BYPASS ? MockAuth.useUser : ClerkAuth.useUser;
-export const UserButton = AUTH_BYPASS ? MockAuth.UserButton : ClerkAuth.UserButton;
-export const SignOutButton = AUTH_BYPASS ? MockAuth.SignOutButton : ClerkAuth.SignOutButton;
-export const SignIn = AUTH_BYPASS ? MockAuth.SignIn : ClerkAuth.SignIn;
-export const SignedIn = AUTH_BYPASS ? MockAuth.SignedIn : ClerkAuth.SignedIn;
-export const SignedOut = AUTH_BYPASS ? MockAuth.SignedOut : ClerkAuth.SignedOut;
-export const SignInButton = AUTH_BYPASS ? MockAuth.SignInButton : ClerkAuth.SignInButton;
+export const UserButton: any = AUTH_BYPASS ? MockAuth.UserButton : ClerkAuth.UserButton;
+export const SignOutButton: any = AUTH_BYPASS ? MockAuth.SignOutButton : ClerkAuth.SignOutButton;
+export const SignIn: any = AUTH_BYPASS ? MockAuth.SignIn : ClerkAuth.SignIn;
+export const SignedIn: any = AUTH_BYPASS ? MockAuth.SignedIn : ClerkAuth.SignedIn;
+export const SignedOut: any = AUTH_BYPASS ? MockAuth.SignedOut : ClerkAuth.SignedOut;
+export const SignInButton: any = AUTH_BYPASS ? MockAuth.SignInButton : ClerkAuth.SignInButton;

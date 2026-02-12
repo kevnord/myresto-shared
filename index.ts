@@ -23,5 +23,4 @@ export * from './lib/theme';
 // Export components (default exports need re-export)
 export { default as Footer } from './components/Footer';
 
-// Export test utilities
-export * from './test/mockAuth';
+// Test utilities available via direct import: @myresto/shared/test/mockAuth
