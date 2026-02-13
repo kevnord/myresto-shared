@@ -218,10 +218,10 @@ export function UserButton({
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-56 rounded-xl border border-[var(--color-border,#333)] bg-[var(--color-bg-elevated,#1e1e1e)] shadow-xl z-50 overflow-hidden">
+        <div className="absolute right-0 mt-3 w-56 rounded-xl border border-[var(--color-border,#333)] bg-[var(--color-bg-elevated,#1e1e1e)] shadow-xl z-50 overflow-hidden">
           <div className="px-4 py-3 border-b border-[var(--color-border,#333)]">
             {user.fullName && (
-              <p className="text-sm font-medium text-[var(--color-text-primary,#fff)]">
+              <p className="text-sm font-medium text-[var(--color-text-primary,#fff)] mb-1">
                 {user.fullName}
               </p>
             )}
@@ -234,7 +234,7 @@ export function UserButton({
               await signOut();
               window.location.href = afterSignOutUrl;
             }}
-            className="w-full text-left px-4 py-2.5 text-sm text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-bg-surface,#2a2a2a)] transition-colors"
+            className="w-full text-left px-4 py-3 text-sm text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-bg-surface,#2a2a2a)] transition-colors"
           >
             Sign out
           </button>
@@ -349,27 +349,27 @@ export function SignIn({
   };
 
   const inputClass =
-    'w-full px-3 py-2.5 rounded-lg border border-[var(--color-border,#333)] bg-[var(--color-bg-surface,#1a1a1a)] text-[var(--color-text-primary,#fff)] text-sm placeholder:text-[var(--color-text-muted,#666)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent,#6366f1)] transition-all';
+    'w-full px-4 py-3 rounded-lg border border-[var(--color-border,#333)] bg-[var(--color-bg-surface,#1a1a1a)] text-[var(--color-text-primary,#fff)] text-sm placeholder:text-[var(--color-text-muted,#666)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent,#6366f1)] transition-all';
 
   const btnPrimary =
-    'w-full py-2.5 rounded-lg bg-[var(--color-accent,#6366f1)] text-white text-sm font-medium disabled:opacity-50 hover:opacity-90 transition-opacity';
+    'w-full py-3 rounded-lg bg-[var(--color-accent,#6366f1)] text-white text-sm font-medium disabled:opacity-50 hover:opacity-90 transition-opacity';
 
   if (view === 'forgot') {
     return (
       <div className="w-full max-w-sm mx-auto p-6 rounded-xl border border-[var(--color-border,#333)] bg-[var(--color-bg-elevated,#1e1e1e)]">
-        <h2 className="text-xl font-bold mb-1 text-[var(--color-text-primary,#fff)]">
+        <h2 className="text-xl font-bold mb-2 text-[var(--color-text-primary,#fff)]">
           Reset Password
         </h2>
-        <p className="text-sm text-[var(--color-text-muted,#888)] mb-4">
+        <p className="text-sm text-[var(--color-text-muted,#888)] mb-6">
           We&apos;ll send you a link to reset your password.
         </p>
-        {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
+        {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
         {forgotSent ? (
           <div className="text-sm text-green-400">
             Check your email for a password reset link.
           </div>
         ) : (
-          <form onSubmit={handleForgot} className="space-y-3">
+          <form onSubmit={handleForgot} className="space-y-4">
             <input
               type="email"
               placeholder="Email"
@@ -385,7 +385,7 @@ export function SignIn({
         )}
         <button
           onClick={() => { setView('sign-in'); setError(''); setForgotSent(false); }}
-          className="mt-4 text-xs text-[var(--color-accent,#6366f1)] hover:underline"
+          className="mt-6 text-xs text-[var(--color-accent,#6366f1)] hover:underline"
         >
           ← Back to sign in
         </button>
@@ -395,12 +395,12 @@ export function SignIn({
 
   return (
     <div className="w-full max-w-sm mx-auto p-6 rounded-xl border border-[var(--color-border,#333)] bg-[var(--color-bg-elevated,#1e1e1e)]">
-      <h2 className="text-xl font-bold mb-4 text-[var(--color-text-primary,#fff)]">
+      <h2 className="text-xl font-bold mb-6 text-[var(--color-text-primary,#fff)]">
         Sign In
       </h2>
-      {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
+      {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="email"
           placeholder="Email"
@@ -431,7 +431,7 @@ export function SignIn({
         </button>
       </form>
 
-      <div className="relative my-5">
+      <div className="relative my-6">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-[var(--color-border,#333)]" />
         </div>
@@ -444,7 +444,7 @@ export function SignIn({
 
       <button
         onClick={() => handleOAuth('google')}
-        className="w-full py-2.5 rounded-lg border border-[var(--color-border,#333)] text-sm text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-bg-surface,#2a2a2a)] transition-colors flex items-center justify-center gap-2"
+        className="w-full py-3 rounded-lg border border-[var(--color-border,#333)] text-sm text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-bg-surface,#2a2a2a)] transition-colors flex items-center justify-center gap-2"
       >
         <svg className="w-4 h-4" viewBox="0 0 24 24">
           <path
@@ -467,7 +467,7 @@ export function SignIn({
         Continue with Google
       </button>
 
-      <p className="mt-4 text-xs text-center text-[var(--color-text-muted,#888)]">
+      <p className="mt-6 text-xs text-center text-[var(--color-text-muted,#888)]">
         Don&apos;t have an account?{' '}
         <a href="/sign-up" className="text-[var(--color-accent,#6366f1)] hover:underline">
           Sign up
@@ -540,15 +540,15 @@ export function SignUp({
   };
 
   const inputClass =
-    'w-full px-3 py-2.5 rounded-lg border border-[var(--color-border,#333)] bg-[var(--color-bg-surface,#1a1a1a)] text-[var(--color-text-primary,#fff)] text-sm placeholder:text-[var(--color-text-muted,#666)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent,#6366f1)] transition-all';
+    'w-full px-4 py-3 rounded-lg border border-[var(--color-border,#333)] bg-[var(--color-bg-surface,#1a1a1a)] text-[var(--color-text-primary,#fff)] text-sm placeholder:text-[var(--color-text-muted,#666)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent,#6366f1)] transition-all';
 
   const btnPrimary =
-    'w-full py-2.5 rounded-lg bg-[var(--color-accent,#6366f1)] text-white text-sm font-medium disabled:opacity-50 hover:opacity-90 transition-opacity';
+    'w-full py-3 rounded-lg bg-[var(--color-accent,#6366f1)] text-white text-sm font-medium disabled:opacity-50 hover:opacity-90 transition-opacity';
 
   if (success) {
     return (
       <div className="w-full max-w-sm mx-auto p-6 rounded-xl border border-[var(--color-border,#333)] bg-[var(--color-bg-elevated,#1e1e1e)] text-center">
-        <h2 className="text-xl font-bold mb-2 text-[var(--color-text-primary,#fff)]">
+        <h2 className="text-xl font-bold mb-3 text-[var(--color-text-primary,#fff)]">
           Check Your Email
         </h2>
         <p className="text-sm text-[var(--color-text-muted,#888)]">
@@ -561,12 +561,12 @@ export function SignUp({
 
   return (
     <div className="w-full max-w-sm mx-auto p-6 rounded-xl border border-[var(--color-border,#333)] bg-[var(--color-bg-elevated,#1e1e1e)]">
-      <h2 className="text-xl font-bold mb-4 text-[var(--color-text-primary,#fff)]">
+      <h2 className="text-xl font-bold mb-6 text-[var(--color-text-primary,#fff)]">
         Create Account
       </h2>
-      {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
+      {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex gap-3">
           <input
             type="text"
@@ -605,7 +605,7 @@ export function SignUp({
         </button>
       </form>
 
-      <div className="relative my-5">
+      <div className="relative my-6">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-[var(--color-border,#333)]" />
         </div>
@@ -618,7 +618,7 @@ export function SignUp({
 
       <button
         onClick={() => handleOAuth('google')}
-        className="w-full py-2.5 rounded-lg border border-[var(--color-border,#333)] text-sm text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-bg-surface,#2a2a2a)] transition-colors flex items-center justify-center gap-2"
+        className="w-full py-3 rounded-lg border border-[var(--color-border,#333)] text-sm text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-bg-surface,#2a2a2a)] transition-colors flex items-center justify-center gap-2"
       >
         <svg className="w-4 h-4" viewBox="0 0 24 24">
           <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
@@ -629,7 +629,7 @@ export function SignUp({
         Continue with Google
       </button>
 
-      <p className="mt-4 text-xs text-center text-[var(--color-text-muted,#888)]">
+      <p className="mt-6 text-xs text-center text-[var(--color-text-muted,#888)]">
         Already have an account?{' '}
         <a href="/sign-in" className="text-[var(--color-accent,#6366f1)] hover:underline">
           Sign in
