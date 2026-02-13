@@ -20,6 +20,7 @@ import {
   type User,
   type SupabaseClient,
 } from '@supabase/supabase-js';
+import { getCurrentApp } from './config';
 
 // ---------------------------------------------------------------------------
 // Supabase client singleton
@@ -258,6 +259,46 @@ export function UserButton({
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
+  // Subscription & role info (lazy-loaded via authorization hooks)
+  const [planLabel, setPlanLabel] = useState<string | null>(null);
+  const [roleLabel, setRoleLabel] = useState<string | null>(null);
+  const supabase = getSupabase();
+
+  // Fetch subscription and role on mount (lightweight — no extra deps)
+  useEffect(() => {
+    if (!user) return;
+    const userId = (user as any).id;
+    if (!userId) return;
+
+    supabase
+      .from('subscriptions')
+      .select('plan, status')
+      .eq('user_id', userId)
+      .single()
+      .then(({ data }) => {
+        if (data?.status === 'active' || data?.status === 'trialing') {
+          setPlanLabel(data.plan === 'pro' ? 'Pro' : 'Free');
+        } else {
+          setPlanLabel('Free');
+        }
+      });
+
+    // Detect app and fetch role
+    const app = getCurrentApp();
+    if (app) {
+      supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .eq('app', app)
+        .then(({ data }) => {
+          if (data && data.length > 0) {
+            setRoleLabel(data.map((r: { role: string }) => r.role).join(', '));
+          }
+        });
+    }
+  }, [user, supabase]);
+
   // Close on outside click
   useEffect(() => {
     if (!open) return;
@@ -366,6 +407,59 @@ export function UserButton({
             >
               {user.primaryEmailAddress?.emailAddress}
             </p>
+            {(planLabel || roleLabel || (user.publicMetadata as any)?.role === 'super_admin') && (
+              <div style={{ display: 'flex', gap: '6px', marginTop: '8px', flexWrap: 'wrap' }}>
+                {(user.publicMetadata as any)?.role === 'super_admin' ? (
+                  <span
+                    style={{
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      padding: '2px 8px',
+                      borderRadius: '9999px',
+                      backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                      color: '#ef4444',
+                    }}
+                  >
+                    Super Admin
+                  </span>
+                ) : (
+                  <>
+                    {planLabel && (
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          padding: '2px 8px',
+                          borderRadius: '9999px',
+                          backgroundColor: planLabel === 'Pro'
+                            ? 'rgba(99, 102, 241, 0.15)'
+                            : 'rgba(156, 163, 175, 0.15)',
+                          color: planLabel === 'Pro'
+                            ? '#818cf8'
+                            : 'var(--color-text-muted, #888)',
+                        }}
+                      >
+                        {planLabel}
+                      </span>
+                    )}
+                    {roleLabel && (
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 500,
+                          padding: '2px 8px',
+                          borderRadius: '9999px',
+                          backgroundColor: 'rgba(34, 197, 94, 0.15)',
+                          color: '#4ade80',
+                        }}
+                      >
+                        {roleLabel}
+                      </span>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
           </div>
           <button
             onClick={async () => {
