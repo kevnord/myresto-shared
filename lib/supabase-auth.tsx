@@ -181,6 +181,68 @@ export function SignedOut({ children }: { children: ReactNode }) {
 }
 
 // ---------------------------------------------------------------------------
+// Loading Spinner Component
+// ---------------------------------------------------------------------------
+
+function Spinner({ className = 'w-5 h-5' }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      style={{ animation: 'spin 0.75s linear infinite' }}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+    </svg>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Google Logo Component (colorful)
+// ---------------------------------------------------------------------------
+
+function GoogleLogo({ className = 'w-5 h-5' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24">
+      <path
+        fill="#4285F4"
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+      />
+    </svg>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // UserButton — avatar dropdown with sign-out
 // ---------------------------------------------------------------------------
 
@@ -209,23 +271,99 @@ export function UserButton({
   if (!user) return null;
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} style={{ position: 'relative' }}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="rounded-full overflow-hidden w-8 h-8 ring-2 ring-transparent hover:ring-[var(--color-accent,#6366f1)] transition-all"
+        style={{
+          width: '36px',
+          height: '36px',
+          borderRadius: '50%',
+          overflow: 'hidden',
+          border: '2px solid transparent',
+          outline: 'none',
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+          boxShadow: open
+            ? `0 0 0 3px var(--color-accent, #6366f1)`
+            : 'none',
+        }}
+        onMouseEnter={(e) => {
+          if (!open) {
+            e.currentTarget.style.boxShadow = `0 0 0 2px var(--color-accent, #6366f1)`;
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!open) {
+            e.currentTarget.style.boxShadow = 'none';
+          }
+        }}
       >
-        <img src={user.imageUrl} alt="" className="w-full h-full object-cover" />
+        <img
+          src={user.imageUrl}
+          alt={user.fullName || 'User avatar'}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-3 w-56 rounded-xl border border-[var(--color-border,#333)] bg-[var(--color-bg-elevated,#1e1e1e)] shadow-xl z-50 overflow-hidden">
-          <div className="px-4 py-3 border-b border-[var(--color-border,#333)]">
+        <div
+          style={{
+            position: 'absolute',
+            right: 0,
+            top: 'calc(100% + 8px)',
+            width: '240px',
+            borderRadius: '12px',
+            border: '1px solid var(--color-border, #333)',
+            backgroundColor: 'var(--color-bg-elevated, #1e1e1e)',
+            boxShadow:
+              '0 10px 38px -10px rgba(0, 0, 0, 0.4), 0 10px 20px -15px rgba(0, 0, 0, 0.3)',
+            zIndex: 50,
+            overflow: 'hidden',
+            animation: 'slideDown 0.15s ease-out',
+          }}
+        >
+          <style>{`
+            @keyframes slideDown {
+              from {
+                opacity: 0;
+                transform: translateY(-4px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+          `}</style>
+          <div
+            style={{
+              padding: '16px',
+              borderBottom: '1px solid var(--color-border, #333)',
+            }}
+          >
             {user.fullName && (
-              <p className="text-sm font-medium text-[var(--color-text-primary,#fff)] mb-1">
+              <p
+                style={{
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  color: 'var(--color-text-primary, #fff)',
+                  marginBottom: '4px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 {user.fullName}
               </p>
             )}
-            <p className="text-xs text-[var(--color-text-muted,#888)] truncate">
+            <p
+              style={{
+                fontSize: '12px',
+                color: 'var(--color-text-muted, #888)',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
               {user.primaryEmailAddress?.emailAddress}
             </p>
           </div>
@@ -234,7 +372,25 @@ export function UserButton({
               await signOut();
               window.location.href = afterSignOutUrl;
             }}
-            className="w-full text-left px-4 py-3 text-sm text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-bg-surface,#2a2a2a)] transition-colors"
+            style={{
+              width: '100%',
+              textAlign: 'left',
+              padding: '12px 16px',
+              fontSize: '14px',
+              fontWeight: 500,
+              color: 'var(--color-text-primary, #fff)',
+              backgroundColor: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'background-color 0.15s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor =
+                'var(--color-bg-surface, #2a2a2a)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+            }}
           >
             Sign out
           </button>
@@ -256,9 +412,33 @@ export function SignInButton({
   mode?: 'modal' | 'redirect';
 }) {
   return (
-    <a href="/sign-in" className="inline-block">
+    <a
+      href="/sign-in"
+      style={{
+        display: 'inline-block',
+        textDecoration: 'none',
+      }}
+    >
       {children ?? (
-        <span className="px-4 py-2 rounded-lg bg-[var(--color-accent,#6366f1)] text-white text-sm font-medium hover:opacity-90 transition-opacity">
+        <span
+          style={{
+            display: 'inline-block',
+            padding: '10px 20px',
+            borderRadius: '8px',
+            backgroundColor: 'var(--color-accent, #6366f1)',
+            color: '#fff',
+            fontSize: '14px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            transition: 'opacity 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.opacity = '0.9';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.opacity = '1';
+          }}
+        >
           Sign In
         </span>
       )}
@@ -348,44 +528,172 @@ export function SignIn({
     setLoading(false);
   };
 
-  const inputClass =
-    'w-full px-4 py-3 rounded-lg border border-[var(--color-border,#333)] bg-[var(--color-bg-surface,#1a1a1a)] text-[var(--color-text-primary,#fff)] text-sm placeholder:text-[var(--color-text-muted,#666)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent,#6366f1)] transition-all';
+  // Shared styles with CSS custom properties for theme support
+  const containerStyle: React.CSSProperties = {
+    width: '100%',
+    maxWidth: '420px',
+    margin: '0 auto',
+    padding: '32px',
+    borderRadius: '16px',
+    border: '1px solid var(--color-border, #333)',
+    backgroundColor: 'var(--color-bg-elevated, #1e1e1e)',
+    boxShadow:
+      '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)',
+  };
 
-  const btnPrimary =
-    'w-full py-3 rounded-lg bg-[var(--color-accent,#6366f1)] text-white text-sm font-medium disabled:opacity-50 hover:opacity-90 transition-opacity';
+  const headingStyle: React.CSSProperties = {
+    fontSize: '28px',
+    fontWeight: 700,
+    letterSpacing: '-0.02em',
+    color: 'var(--color-text-primary, #fff)',
+    marginBottom: '8px',
+  };
+
+  const subtitleStyle: React.CSSProperties = {
+    fontSize: '14px',
+    color: 'var(--color-text-muted, #888)',
+    marginBottom: '24px',
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '12px 14px',
+    borderRadius: '10px',
+    border: '1.5px solid var(--color-border, #333)',
+    backgroundColor: 'var(--color-bg-surface, #1a1a1a)',
+    color: 'var(--color-text-primary, #fff)',
+    fontSize: '14px',
+    outline: 'none',
+    transition: 'all 0.2s ease',
+  };
+
+  const primaryButtonStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '12px',
+    borderRadius: '10px',
+    backgroundColor: 'var(--color-accent, #6366f1)',
+    color: '#fff',
+    fontSize: '14px',
+    fontWeight: 600,
+    border: 'none',
+    cursor: loading ? 'not-allowed' : 'pointer',
+    opacity: loading ? 0.6 : 1,
+    transition: 'all 0.2s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+  };
+
+  const secondaryButtonStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '12px',
+    borderRadius: '10px',
+    border: '1.5px solid var(--color-border, #333)',
+    backgroundColor: 'transparent',
+    color: 'var(--color-text-primary, #fff)',
+    fontSize: '14px',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+  };
+
+  const errorStyle: React.CSSProperties = {
+    padding: '12px',
+    borderRadius: '8px',
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    border: '1px solid rgba(239, 68, 68, 0.3)',
+    color: '#ef4444',
+    fontSize: '13px',
+    marginBottom: '16px',
+  };
+
+  const successStyle: React.CSSProperties = {
+    padding: '12px',
+    borderRadius: '8px',
+    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+    border: '1px solid rgba(34, 197, 94, 0.3)',
+    color: '#22c55e',
+    fontSize: '13px',
+  };
 
   if (view === 'forgot') {
     return (
-      <div className="w-full max-w-sm mx-auto p-6 rounded-xl border border-[var(--color-border,#333)] bg-[var(--color-bg-elevated,#1e1e1e)]">
-        <h2 className="text-xl font-bold mb-2 text-[var(--color-text-primary,#fff)]">
-          Reset Password
-        </h2>
-        <p className="text-sm text-[var(--color-text-muted,#888)] mb-6">
+      <div style={containerStyle}>
+        <h2 style={headingStyle}>Reset Password</h2>
+        <p style={subtitleStyle}>
           We&apos;ll send you a link to reset your password.
         </p>
-        {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+        {error && <div style={errorStyle}>{error}</div>}
         {forgotSent ? (
-          <div className="text-sm text-green-400">
+          <div style={successStyle}>
             Check your email for a password reset link.
           </div>
         ) : (
-          <form onSubmit={handleForgot} className="space-y-4">
+          <form onSubmit={handleForgot} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <input
               type="email"
-              placeholder="Email"
+              placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={inputClass}
+              style={inputStyle}
+              onFocus={(e) => {
+                e.currentTarget.style.borderColor = 'var(--color-accent, #6366f1)';
+                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99, 102, 241, 0.1)';
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.borderColor = 'var(--color-border, #333)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
               required
             />
-            <button type="submit" disabled={loading} className={btnPrimary}>
-              {loading ? 'Sending...' : 'Send Reset Link'}
+            <button
+              type="submit"
+              disabled={loading}
+              style={primaryButtonStyle}
+              onMouseEnter={(e) => {
+                if (!loading) e.currentTarget.style.opacity = '0.9';
+              }}
+              onMouseLeave={(e) => {
+                if (!loading) e.currentTarget.style.opacity = '1';
+              }}
+            >
+              {loading ? (
+                <>
+                  <Spinner className="w-4 h-4" />
+                  Sending...
+                </>
+              ) : (
+                'Send Reset Link'
+              )}
             </button>
           </form>
         )}
         <button
-          onClick={() => { setView('sign-in'); setError(''); setForgotSent(false); }}
-          className="mt-6 text-xs text-[var(--color-accent,#6366f1)] hover:underline"
+          onClick={() => {
+            setView('sign-in');
+            setError('');
+            setForgotSent(false);
+          }}
+          style={{
+            marginTop: '24px',
+            fontSize: '13px',
+            color: 'var(--color-accent, #6366f1)',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            textDecoration: 'none',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.textDecoration = 'underline';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.textDecoration = 'none';
+          }}
         >
           ← Back to sign in
         </button>
@@ -394,49 +702,122 @@ export function SignIn({
   }
 
   return (
-    <div className="w-full max-w-sm mx-auto p-6 rounded-xl border border-[var(--color-border,#333)] bg-[var(--color-bg-elevated,#1e1e1e)]">
-      <h2 className="text-xl font-bold mb-6 text-[var(--color-text-primary,#fff)]">
-        Sign In
-      </h2>
-      {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+    <div style={containerStyle}>
+      <h2 style={headingStyle}>Sign In</h2>
+      <p style={subtitleStyle}>Welcome back! Please sign in to continue.</p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className={inputClass}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className={inputClass}
-          required
-        />
-        <div className="flex justify-end">
+      {error && <div style={errorStyle}>{error}</div>}
+
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div>
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={inputStyle}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-accent, #6366f1)';
+              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99, 102, 241, 0.1)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-border, #333)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={inputStyle}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-accent, #6366f1)';
+              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99, 102, 241, 0.1)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-border, #333)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+            required
+          />
           <button
             type="button"
-            onClick={() => { setView('forgot'); setError(''); }}
-            className="text-xs text-[var(--color-text-muted,#888)] hover:text-[var(--color-accent,#6366f1)] transition-colors"
+            onClick={() => {
+              setView('forgot');
+              setError('');
+            }}
+            style={{
+              marginTop: '8px',
+              fontSize: '13px',
+              color: 'var(--color-text-muted, #888)',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0,
+              textDecoration: 'none',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = 'var(--color-accent, #6366f1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-text-muted, #888)';
+            }}
           >
             Forgot password?
           </button>
         </div>
-        <button type="submit" disabled={loading} className={btnPrimary}>
-          {loading ? 'Signing in...' : 'Sign In'}
+        <button
+          type="submit"
+          disabled={loading}
+          style={primaryButtonStyle}
+          onMouseEnter={(e) => {
+            if (!loading) e.currentTarget.style.opacity = '0.9';
+          }}
+          onMouseLeave={(e) => {
+            if (!loading) e.currentTarget.style.opacity = '1';
+          }}
+        >
+          {loading ? (
+            <>
+              <Spinner className="w-4 h-4" />
+              Signing in...
+            </>
+          ) : (
+            'Sign In'
+          )}
         </button>
       </form>
 
-      <div className="relative my-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-[var(--color-border,#333)]" />
+      <div style={{ position: 'relative', margin: '24px 0' }}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            style={{
+              width: '100%',
+              borderTop: '1px solid var(--color-border, #333)',
+            }}
+          />
         </div>
-        <div className="relative flex justify-center text-xs">
-          <span className="px-2 bg-[var(--color-bg-elevated,#1e1e1e)] text-[var(--color-text-muted,#888)]">
+        <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+          <span
+            style={{
+              padding: '0 12px',
+              backgroundColor: 'var(--color-bg-elevated, #1e1e1e)',
+              fontSize: '12px',
+              color: 'var(--color-text-muted, #888)',
+              fontWeight: 500,
+            }}
+          >
             or
           </span>
         </div>
@@ -444,32 +825,43 @@ export function SignIn({
 
       <button
         onClick={() => handleOAuth('google')}
-        className="w-full py-3 rounded-lg border border-[var(--color-border,#333)] text-sm text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-bg-surface,#2a2a2a)] transition-colors flex items-center justify-center gap-2"
+        style={secondaryButtonStyle}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'var(--color-bg-surface, #2a2a2a)';
+          e.currentTarget.style.borderColor = 'var(--color-accent, #6366f1)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'transparent';
+          e.currentTarget.style.borderColor = 'var(--color-border, #333)';
+        }}
       >
-        <svg className="w-4 h-4" viewBox="0 0 24 24">
-          <path
-            fill="currentColor"
-            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-          />
-          <path
-            fill="currentColor"
-            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-          />
-          <path
-            fill="currentColor"
-            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-          />
-          <path
-            fill="currentColor"
-            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-          />
-        </svg>
+        <GoogleLogo />
         Continue with Google
       </button>
 
-      <p className="mt-6 text-xs text-center text-[var(--color-text-muted,#888)]">
+      <p
+        style={{
+          marginTop: '24px',
+          fontSize: '13px',
+          textAlign: 'center',
+          color: 'var(--color-text-muted, #888)',
+        }}
+      >
         Don&apos;t have an account?{' '}
-        <a href="/sign-up" className="text-[var(--color-accent,#6366f1)] hover:underline">
+        <a
+          href="/sign-up"
+          style={{
+            color: 'var(--color-accent, #6366f1)',
+            textDecoration: 'none',
+            fontWeight: 600,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.textDecoration = 'underline';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.textDecoration = 'none';
+          }}
+        >
           Sign up
         </a>
       </p>
@@ -539,78 +931,269 @@ export function SignUp({
     });
   };
 
-  const inputClass =
-    'w-full px-4 py-3 rounded-lg border border-[var(--color-border,#333)] bg-[var(--color-bg-surface,#1a1a1a)] text-[var(--color-text-primary,#fff)] text-sm placeholder:text-[var(--color-text-muted,#666)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent,#6366f1)] transition-all';
+  // Shared styles
+  const containerStyle: React.CSSProperties = {
+    width: '100%',
+    maxWidth: '420px',
+    margin: '0 auto',
+    padding: '32px',
+    borderRadius: '16px',
+    border: '1px solid var(--color-border, #333)',
+    backgroundColor: 'var(--color-bg-elevated, #1e1e1e)',
+    boxShadow:
+      '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)',
+  };
 
-  const btnPrimary =
-    'w-full py-3 rounded-lg bg-[var(--color-accent,#6366f1)] text-white text-sm font-medium disabled:opacity-50 hover:opacity-90 transition-opacity';
+  const headingStyle: React.CSSProperties = {
+    fontSize: '28px',
+    fontWeight: 700,
+    letterSpacing: '-0.02em',
+    color: 'var(--color-text-primary, #fff)',
+    marginBottom: '8px',
+  };
+
+  const subtitleStyle: React.CSSProperties = {
+    fontSize: '14px',
+    color: 'var(--color-text-muted, #888)',
+    marginBottom: '24px',
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '12px 14px',
+    borderRadius: '10px',
+    border: '1.5px solid var(--color-border, #333)',
+    backgroundColor: 'var(--color-bg-surface, #1a1a1a)',
+    color: 'var(--color-text-primary, #fff)',
+    fontSize: '14px',
+    outline: 'none',
+    transition: 'all 0.2s ease',
+  };
+
+  const primaryButtonStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '12px',
+    borderRadius: '10px',
+    backgroundColor: 'var(--color-accent, #6366f1)',
+    color: '#fff',
+    fontSize: '14px',
+    fontWeight: 600,
+    border: 'none',
+    cursor: loading ? 'not-allowed' : 'pointer',
+    opacity: loading ? 0.6 : 1,
+    transition: 'all 0.2s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+  };
+
+  const secondaryButtonStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '12px',
+    borderRadius: '10px',
+    border: '1.5px solid var(--color-border, #333)',
+    backgroundColor: 'transparent',
+    color: 'var(--color-text-primary, #fff)',
+    fontSize: '14px',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+  };
+
+  const errorStyle: React.CSSProperties = {
+    padding: '12px',
+    borderRadius: '8px',
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    border: '1px solid rgba(239, 68, 68, 0.3)',
+    color: '#ef4444',
+    fontSize: '13px',
+    marginBottom: '16px',
+  };
+
+  const successTextStyle: React.CSSProperties = {
+    fontSize: '14px',
+    color: 'var(--color-text-muted, #888)',
+    lineHeight: '1.6',
+  };
 
   if (success) {
     return (
-      <div className="w-full max-w-sm mx-auto p-6 rounded-xl border border-[var(--color-border,#333)] bg-[var(--color-bg-elevated,#1e1e1e)] text-center">
-        <h2 className="text-xl font-bold mb-3 text-[var(--color-text-primary,#fff)]">
-          Check Your Email
-        </h2>
-        <p className="text-sm text-[var(--color-text-muted,#888)]">
-          We sent a confirmation link to <strong className="text-[var(--color-text-primary,#fff)]">{email}</strong>.
-          Click it to activate your account.
+      <div style={{ ...containerStyle, textAlign: 'center' }}>
+        <div
+          style={{
+            width: '56px',
+            height: '56px',
+            margin: '0 auto 16px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <svg
+            style={{ width: '28px', height: '28px', color: '#22c55e' }}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+        </div>
+        <h2 style={headingStyle}>Check Your Email</h2>
+        <p style={successTextStyle}>
+          We sent a confirmation link to{' '}
+          <strong style={{ color: 'var(--color-text-primary, #fff)', fontWeight: 600 }}>
+            {email}
+          </strong>
+          . Click it to activate your account.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-sm mx-auto p-6 rounded-xl border border-[var(--color-border,#333)] bg-[var(--color-bg-elevated,#1e1e1e)]">
-      <h2 className="text-xl font-bold mb-6 text-[var(--color-text-primary,#fff)]">
-        Create Account
-      </h2>
-      {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+    <div style={containerStyle}>
+      <h2 style={headingStyle}>Create Account</h2>
+      <p style={subtitleStyle}>Get started with your free account today.</p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex gap-3">
+      {error && <div style={errorStyle}>{error}</div>}
+
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
           <input
             type="text"
             placeholder="First name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            className={inputClass}
+            style={inputStyle}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-accent, #6366f1)';
+              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99, 102, 241, 0.1)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-border, #333)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
           />
           <input
             type="text"
             placeholder="Last name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            className={inputClass}
+            style={inputStyle}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-accent, #6366f1)';
+              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99, 102, 241, 0.1)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-border, #333)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
           />
         </div>
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className={inputClass}
+          style={inputStyle}
+          onFocus={(e) => {
+            e.currentTarget.style.borderColor = 'var(--color-accent, #6366f1)';
+            e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99, 102, 241, 0.1)';
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.borderColor = 'var(--color-border, #333)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
           required
         />
-        <input
-          type="password"
-          placeholder="Password (min 6 characters)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className={inputClass}
-          required
-          minLength={6}
-        />
-        <button type="submit" disabled={loading} className={btnPrimary}>
-          {loading ? 'Creating account...' : 'Sign Up'}
+        <div>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={inputStyle}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-accent, #6366f1)';
+              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(99, 102, 241, 0.1)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'var(--color-border, #333)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+            required
+            minLength={6}
+          />
+          <p
+            style={{
+              marginTop: '6px',
+              fontSize: '12px',
+              color: 'var(--color-text-muted, #888)',
+            }}
+          >
+            Minimum 6 characters
+          </p>
+        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          style={primaryButtonStyle}
+          onMouseEnter={(e) => {
+            if (!loading) e.currentTarget.style.opacity = '0.9';
+          }}
+          onMouseLeave={(e) => {
+            if (!loading) e.currentTarget.style.opacity = '1';
+          }}
+        >
+          {loading ? (
+            <>
+              <Spinner className="w-4 h-4" />
+              Creating account...
+            </>
+          ) : (
+            'Sign Up'
+          )}
         </button>
       </form>
 
-      <div className="relative my-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-[var(--color-border,#333)]" />
+      <div style={{ position: 'relative', margin: '24px 0' }}>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            style={{
+              width: '100%',
+              borderTop: '1px solid var(--color-border, #333)',
+            }}
+          />
         </div>
-        <div className="relative flex justify-center text-xs">
-          <span className="px-2 bg-[var(--color-bg-elevated,#1e1e1e)] text-[var(--color-text-muted,#888)]">
+        <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+          <span
+            style={{
+              padding: '0 12px',
+              backgroundColor: 'var(--color-bg-elevated, #1e1e1e)',
+              fontSize: '12px',
+              color: 'var(--color-text-muted, #888)',
+              fontWeight: 500,
+            }}
+          >
             or
           </span>
         </div>
@@ -618,20 +1201,43 @@ export function SignUp({
 
       <button
         onClick={() => handleOAuth('google')}
-        className="w-full py-3 rounded-lg border border-[var(--color-border,#333)] text-sm text-[var(--color-text-primary,#fff)] hover:bg-[var(--color-bg-surface,#2a2a2a)] transition-colors flex items-center justify-center gap-2"
+        style={secondaryButtonStyle}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'var(--color-bg-surface, #2a2a2a)';
+          e.currentTarget.style.borderColor = 'var(--color-accent, #6366f1)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'transparent';
+          e.currentTarget.style.borderColor = 'var(--color-border, #333)';
+        }}
       >
-        <svg className="w-4 h-4" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
-          <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-          <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-          <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-        </svg>
+        <GoogleLogo />
         Continue with Google
       </button>
 
-      <p className="mt-6 text-xs text-center text-[var(--color-text-muted,#888)]">
+      <p
+        style={{
+          marginTop: '24px',
+          fontSize: '13px',
+          textAlign: 'center',
+          color: 'var(--color-text-muted, #888)',
+        }}
+      >
         Already have an account?{' '}
-        <a href="/sign-in" className="text-[var(--color-accent,#6366f1)] hover:underline">
+        <a
+          href="/sign-in"
+          style={{
+            color: 'var(--color-accent, #6366f1)',
+            textDecoration: 'none',
+            fontWeight: 600,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.textDecoration = 'underline';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.textDecoration = 'none';
+          }}
+        >
           Sign in
         </a>
       </p>
