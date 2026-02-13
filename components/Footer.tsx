@@ -30,7 +30,7 @@ const DEFAULT_LINKS = [
 export default function Footer({ appName, commitHash, links = DEFAULT_LINKS }: FooterProps) {
   return (
     <footer className="px-6 py-8 border-t border-[var(--color-border)] text-center">
-      <div className="flex items-center justify-center gap-4 mb-4 text-xs flex-wrap">
+      <div className="flex items-center justify-center gap-4 mb-4 text-sm flex-wrap">
         {links.map((link, i) => (
           <>
             {i > 0 && <span key={`sep-${i}`} className="text-[var(--color-text-subtle)]">·</span>}
@@ -44,11 +44,11 @@ export default function Footer({ appName, commitHash, links = DEFAULT_LINKS }: F
           </>
         ))}
       </div>
-      <p className="text-xs text-[var(--color-text-subtle)]">
+      <p className="text-sm text-[var(--color-text-subtle)]">
         © {new Date().getFullYear()} {appName} · Part of MyRestoLife
       </p>
       {commitHash && (
-        <p className="text-[10px] text-[var(--color-text-subtle)] mt-1 opacity-50">
+        <p className="text-xs text-[var(--color-text-subtle)] mt-1 opacity-50">
           {commitHash}
         </p>
       )}

@@ -111,7 +111,7 @@ export function useSubscription() {
             .from('subscriptions')
             .select('*')
             .eq('user_id', userId)
-            .single()
+            .maybeSingle()
             .then(({ data, error }) => {
             if (cancelled)
                 return;
