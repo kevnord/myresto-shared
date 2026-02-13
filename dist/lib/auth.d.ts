@@ -2,7 +2,7 @@
  * Auth Abstraction Layer
  *
  * Re-exports authentication hooks and components from either:
- * - @clerk/clerk-react (production)
+ * - ./supabase-auth (production — Supabase Auth)
  * - ../test/mockAuth (when VITE_AUTH_BYPASS is enabled)
  *
  * Usage in your app:
@@ -10,14 +10,18 @@
  * import { useAuth, useUser, UserButton } from '@myresto/shared/lib/auth';
  * ```
  */
-import * as ClerkAuth from '@clerk/clerk-react';
+import * as SupabaseAuth from './supabase-auth';
 import * as MockAuth from '../test/mockAuth';
-export declare const useAuth: typeof MockAuth.useAuth | ((initialAuthStateOrOptions?: Record<string, any> | import("@clerk/shared/types").PendingSessionOptions | null | undefined) => import("@clerk/shared/types").UseAuthReturn);
-export declare const useUser: typeof MockAuth.useUser | typeof ClerkAuth.useUser;
+export declare const AuthProvider: any;
+export declare const useAuth: typeof MockAuth.useAuth;
+export declare const useUser: typeof MockAuth.useUser;
 export declare const UserButton: any;
 export declare const SignOutButton: any;
 export declare const SignIn: any;
+export declare const SignUp: any;
 export declare const SignedIn: any;
 export declare const SignedOut: any;
 export declare const SignInButton: any;
+export declare const forgotPassword: typeof SupabaseAuth.forgotPassword;
+export declare const useSupabase: typeof SupabaseAuth.useSupabase;
 //# sourceMappingURL=auth.d.ts.map
